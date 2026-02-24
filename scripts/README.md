@@ -14,5 +14,5 @@ powershell -ExecutionPolicy Bypass -File .\download-and-install-unpacked.ps1
 Pin to a specific release tag:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\download-and-install-unpacked.ps1 -VersionTag "installer-20260224-104422"
+powershell -ExecutionPolicy Bypass -File .\download-and-install-unpacked.ps1 -VersionTag "installer-20260224-032539"
 ```

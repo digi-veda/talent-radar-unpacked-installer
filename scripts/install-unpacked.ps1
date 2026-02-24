@@ -19,6 +19,13 @@ function Resolve-DefaultExtensionDir {
 }
 
 function Open-ChromeExtensionsPage {
+  try {
+    Start-Process "chrome://extensions" | Out-Null
+    return $true
+  } catch {
+    # Fall back to explicit chrome.exe lookup.
+  }
+
   $chromeCandidates = @(
     (Join-Path $Env:ProgramFiles "Google\Chrome\Application\chrome.exe"),
     (Join-Path ${Env:ProgramFiles(x86)} "Google\Chrome\Application\chrome.exe"),
@@ -38,12 +45,7 @@ function Open-ChromeExtensionsPage {
     return $true
   }
 
-  try {
-    Start-Process "chrome://extensions" | Out-Null
-    return $true
-  } catch {
-    return $false
-  }
+  return $false
 }
 
 $resolvedExtensionDir = Resolve-DefaultExtensionDir
