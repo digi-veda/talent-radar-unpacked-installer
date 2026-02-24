@@ -51,13 +51,6 @@ function Download-Zip {
 }
 
 function Open-ChromeExtensions {
-  try {
-    Start-Process "chrome://extensions" | Out-Null
-    return
-  } catch {
-    # ignore and continue with explicit path probes
-  }
-
   $chromeCandidates = @(
     (Join-Path $Env:ProgramFiles "Google\Chrome\Application\chrome.exe"),
     (Join-Path ${Env:ProgramFiles(x86)} "Google\Chrome\Application\chrome.exe"),
@@ -70,6 +63,22 @@ function Open-ChromeExtensions {
       return
     }
   }
+
+  $chromeCommand = Get-Command chrome -ErrorAction SilentlyContinue
+  if ($chromeCommand) {
+    Start-Process -FilePath $chromeCommand.Source -ArgumentList "chrome://extensions" | Out-Null
+    return
+  }
+
+  try {
+    Start-Process "googlechrome://extensions/" | Out-Null
+    return
+  } catch {
+    # fall through to manual instructions
+  }
+
+  Write-Host "Could not find Google Chrome automatically." -ForegroundColor Yellow
+  Write-Host "Please open Chrome and go to: chrome://extensions" -ForegroundColor Yellow
 }
 
 $targetRoot = Resolve-InstallRoot
